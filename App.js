@@ -28,6 +28,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     queryServer('/connect').then(obj => {
@@ -64,8 +65,10 @@ const App = () => {
     .then((response) => {
       switch(response.code) {
         case 1:
-          setIsLoggedIn(true)
-          setServerMsg(response.text)
+          setIsLoggedIn(true);
+          setServerMsg(response.text);
+          setEmail(credentials.email);
+          showComponent('App');
           break;
         case 2:
           setServerMsg(response.text)
@@ -127,7 +130,7 @@ const App = () => {
   }
 
   const addItem = (text) => {
-    postData('/add-todo', {text: text})
+    postData('/add-todo', {text: text, email: email})
     .then(response => {
       setServerMsg(response.text)
     }).then(() => {
