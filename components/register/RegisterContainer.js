@@ -5,17 +5,31 @@ const Register = ({register, serverMsg, isLoggedIn, isRegisterVisible, showCompo
     const [email, setEmail] = useState('');
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
+    const [age, setAge] = useState(0);
 
     function handleChange(changed) {
-        changed.email ? 
-            setEmail(changed.email) : 
-            changed.password1 ? 
-                setPassword1(changed.password1) : 
-                setPassword2(changed.password2);
+        if(changed.email)
+            setEmail(changed.email);
+        else if(changed.password1)
+            setPassword1(changed.password1);
+        else if(changed.password2)
+            setPassword2(changed.password2)
+        else if(changed.age)
+            setAge(changed.age)
+        else
+            console.log("something's wrong in ./components/register/registerContainer, handleChange method.");
+
+        // changed.email ? 
+        //     setEmail(changed.email) : 
+        //     changed.password1 ? 
+        //         setPassword1(changed.password1) : 
+        //         changed.password2 ?
+        //             setPassword2(changed.password2) :
+        //             setAge(changed.age);
     }
 
     function handlePress(btnText){
-        btnText === 'Register' ? register({email, password1, password2}) : showComponent('Login');
+        btnText === 'Register' ? register({email, password1, password2, age}) : showComponent('Login');
     }
 
     if(isLoggedIn || !isRegisterVisible)
@@ -42,6 +56,12 @@ const Register = ({register, serverMsg, isLoggedIn, isRegisterVisible, showCompo
                 style={styles.passwordInput}
                 onChangeText={(value) => handleChange({password2: value})}
             />
+            <TextInput 
+                name='age' 
+                placeholder={'Age'}
+                style={styles.ageInput}
+                onChangeText={(value) => handleChange({age: parseInt(value)})}
+            />
             <TouchableOpacity
                 onPress={() => handlePress('Register')}
                 style={styles.button}
@@ -64,6 +84,9 @@ const styles = {
     },
 
     passwordInput: {
+
+    },
+    ageInput: {
 
     },
     button: {

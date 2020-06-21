@@ -88,7 +88,7 @@ const App = () => {
   }
 
   function register(credentials){
-    let {email, password1, password2} = credentials
+    let {email, password1, password2, age} = credentials
     if(!email){
       Alert.alert(
         'Error', 
@@ -103,24 +103,34 @@ const App = () => {
         [{text: 'Ok'}]
       )
     }
-    postData('/register', credentials)
-    .then(response => {
-      switch (response.code) {
-        case 1:
-          setServerMsg(response.text);
-          showComponent('Login');
-          break;
-        case 2:
-          setServerMsg(response.text);
-          break;
-        case 3:
-          setServerMsg(response.text); 
-          break;
-        default:
-          setServerMsg('Something Strange happened...' + response.text);
-          break;
-      }
-    })
+    else if( !age || isNaN(age) || (age < 18) ){
+      Alert.alert(
+        'Error', 
+        "+Age field can't be empty.\n+Age field must contain only numeric values.\n+You must at least 18 years old to register.", 
+        [{text: 'Ok'}]
+      )
+    }
+    else {
+      setServerMsg('age: ' + age);
+      postData('/register', credentials)
+      .then(response => {
+        switch (response.code) {
+          case 1:
+            setServerMsg(response.text);
+            showComponent('Login');
+            break;
+          case 2:
+            setServerMsg(response.text);
+            break;
+          case 3:
+            setServerMsg(response.text); 
+            break;
+          default:
+            setServerMsg('Something Strange happened...' + response.text);
+            break;
+        }
+      })
+    }
   }
 
   const deleteItem = (id) => {
