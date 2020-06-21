@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, FlatList, TextInput} from 'react-native'
+import {View, Text, FlatList, TextInput, Alert} from 'react-native'
 
 import Login from './components/login/LoginContainer'
+import Register from './components/register/RegisterContainer'
 import Header from './components/header/HeaderContainer'
 import ListItem from './components/list_item/ListItemContainer'
 import AddItem from './components/add_item/AddItemContainer'
@@ -25,6 +26,8 @@ const App = () => {
   const [isEditInProgress, setIsEditInProgress] = useState(false);
   const [serverMsg, setServerMsg] = useState('testing server ...');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoginVisible, setIsLoginVisible] = useState(true);
+  const [isRegisterVisible, setIsRegisterVisible] = useState(false);
 
   useEffect(() => {
     queryServer('/connect').then(obj => {
@@ -75,9 +78,46 @@ const App = () => {
           break;
         default:
           setServerMsg('Something Strange happened...' + response.text)
+          break;
       }
     })
     .catch(err => setServerMsg('catched:' + err));
+  }
+
+  function register(credentials){
+    let {email, password1, password2} = credentials
+    if(!email){
+      Alert.alert(
+        'Error', 
+        "Email field can't be empty!", 
+        [{text: 'Ok'}]
+      )
+    }
+    else if(!password1 || !password2 || (password1.length < 3) || (password1 != password2)){
+      Alert.alert(
+        'Error', 
+        "+Password must be at least 3 characters.\n+Passwords must match.", 
+        [{text: 'Ok'}]
+      )
+    }
+    postData('/register', credentials)
+    .then(response => {
+      switch (response.code) {
+        case 1:
+          setServerMsg(response.text);
+          showComponent('Login');
+          break;
+        case 2:
+          setServerMsg(response.text);
+          break;
+        case 3:
+          setServerMsg(response.text); 
+          break;
+        default:
+          setServerMsg('Something Strange happened...' + response.text);
+          break;
+      }
+    })
   }
 
   const deleteItem = (id) => {
@@ -131,13 +171,49 @@ const App = () => {
     })
   }
 
+  function showComponent(name){
+    switch (name) {
+      case 'App':
+        {
+          setIsLoginVisible(false);
+          setIsRegisterVisible(false);
+        }
+        break;
+      case 'Login':
+        {
+          setIsLoginVisible(true);
+          setIsRegisterVisible(false);
+        }
+        break;
+      case 'Register':
+        {
+          setIsLoginVisible(false);
+          setIsRegisterVisible(true);
+        }
+        break;
+      default:
+        setServerMsg("DEV_LOG: something's wrong in showComponent function")
+        break;
+    }
+  }
+
   if(!isLoggedIn) {
     return(
       <View>
         <Login 
           login={login}
           serverMsg={serverMsg}
-        />
+          isLoggedIn={isLoggedIn}
+          isLoginVisible={isLoginVisible}
+          showComponent={showComponent}
+      />
+      <Register 
+          register={register}
+          serverMsg={serverMsg}
+          isLoggedIn={isLoggedIn}
+          isRegisterVisible={isRegisterVisible}
+          showComponent={showComponent}
+      />
       </View>
     )
   }

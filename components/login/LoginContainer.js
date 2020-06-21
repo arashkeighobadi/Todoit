@@ -1,17 +1,21 @@
 import React, {useState} from 'react'
-import {View, Text, TextInput, TouchableOpacity} from 'react-native'
+import {View, Text, TextInput, TouchableOpacity, SnapshotViewIOSComponent} from 'react-native'
 
-const Login = ({login, serverMsg}) => {
+const Login = ({login, serverMsg, isLoggedIn, isLoginVisible, showComponent}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [registerIsVisible, setRegisterIsVisible] = useState(false)
 
     function handleChange(changed) {
         changed.email ? setEmail(changed.email) : setPassword(changed.password);
     }
 
-    function handlePress(){
-        login({email, password})
+    function handlePress(btnText){
+        btnText === 'Login' ? login({email, password}) : showComponent('Register');
     }
+
+    if(isLoggedIn || !isLoginVisible)
+        return null;
 
     return(
         <View>
@@ -29,10 +33,16 @@ const Login = ({login, serverMsg}) => {
                 onChangeText={(value) => handleChange({password: value})}
             />
             <TouchableOpacity
-                onPress={handlePress}
+                onPress={() => handlePress('Login')}
                 style={styles.button}
             >
                 <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => handlePress('Register')}
+                style={styles.button}
+            >
+                <Text style={styles.buttonText}>Not Registered?</Text>
             </TouchableOpacity>
         </View>
     )
