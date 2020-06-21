@@ -169,18 +169,26 @@ const App = () => {
     })
     .catch(error => setServerMsg(error.message));
   }
-
+  
   const editItem = (id, text) => {
-    setEditableItem({})
-    setItems(prevState => 
-      prevState.map(item => {
-        if(item.id === id){
-          item.text = text
-        }
-        return item
-      })
-    )
-    setIsEditInProgress(false)
+    setEditableItem({});
+    postData('/edit-todo', {id: id, text: text})
+    .then(response => {
+      // temporary solution (No need to fetch everything)
+      getAllTodosFromServer(email);
+      setServerMsg(response.text);
+      setIsEditInProgress(false)
+    })
+    .catch(err => setServerMsg(err.message));
+
+    // setItems(prevState => 
+    //   prevState.map(item => {
+    //     if(item.id === id){
+    //       item.text = text
+    //     }
+    //     return item
+    //   })
+    // )
   }
 
   const openEditor = (item) => {
@@ -189,6 +197,14 @@ const App = () => {
   }
 
   const changeCompleted = (item) => {
+
+    postData('/edit-todo', {id: item.id, completed: item.completed})
+    .then(response => {
+      getAllTodosFromServer(email);
+      setServerMsg(response.text);
+    })
+    .catch(err => setServerMsg(err.message));
+
 
     setItems(prevState => {
       let newState = prevState.map(prevItem => {
