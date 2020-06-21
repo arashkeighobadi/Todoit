@@ -4,41 +4,55 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome'
 
 import ListItemBtns from '../list_item_btns/listItemBtnsContainer'
 
-const ListItem = ({item, deleteItem, openEditor}) => {
-    return(
-        <TouchableOpacity style={styles.listItem}>
-            <View style={styles.listItemView}>
-                <Text style={styles.listItemText}>{item.text}</Text>
-                <ListItemBtns
-                    item={item}
-                    deleteItem={deleteItem}
-                    openEditor={openEditor}
-                />
-            </View>
+const ListItem = ({item, deleteItem, openEditor, changeCompleted}) => {
 
-        </TouchableOpacity>
+    const handlePress = () => {
+        changeCompleted(item)
+    }
+
+    const listItemTextStyle =  {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        fontSize: 23,
+        marginRight: 10,
+        alignItems: 'center',
+        textDecorationLine: item.completed ? 'line-through' : ''
+    }
+
+    return(
+        <View style={styles.listItemView}>
+            <TouchableOpacity 
+                style={styles.listItemTouchable}
+                onPress={handlePress}
+            >
+                <Text style={listItemTextStyle}>{item.text}</Text>
+            </TouchableOpacity>
+            <ListItemBtns
+                item={item}
+                deleteItem={deleteItem}
+                openEditor={openEditor}
+            />
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    listItem: {
+    listItemView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         padding: 10,
         backgroundColor: '#f8f8f8',
         borderBottomWidth: 2,
         borderColor: '#eee'
     },
-    listItemView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-
-    listItemText: {
+    
+    listItemTouchable: {
         flex: 1,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        fontSize: 23,
-        marginRight: 10
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
 
     button: {

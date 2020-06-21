@@ -12,81 +12,42 @@ const App = () => {
   const URL = `http://${SERVER_IP}:${SERVER_PORT}`;
 
   const [items, setItems] = useState([
-    {id: 1, text: 'todo1_______________________very___long___item'},
-    {id: 2, text: 'todo2'},
-    {id: 3, text: ''},
-    {id: 4, text: 'todo4'},
-    {id: 5, text: 'todo5'},
-    {id: 6, text: 'todo6'},
-    {id: 7, text: 'todo7'},
+    {id: 1, text: 'todo1', completed: true},
+    {id: 2, text: 'todo2', completed: false}
+    // {id: 3, text: ''},
+    // {id: 4, text: 'todo4'},
+    // {id: 5, text: 'todo5_______________________very___long___item'},
+    // {id: 6, text: 'todo6'},
+    // {id: 7, text: 'todo7'},
   ])
   const [editableItem, setEditableItem] = useState({})
   const [isEditInProgress, setIsEditInProgress] = useState(false)
   const [serverMsg, setServerMsg] = useState('testing server ...')
 
   useEffect(  () => {
-    // fetch(URL + '/connect').then(response => {
-    //   if(response.status === 200) {
-    //     return response.text()
-    //   }
-    //   else {
-    //     throw new Error('Something is wrong!')
-    //   }
-    // }).then(responseText => {
-    //   setServerMsg(responseText)
-    // }).catch(error => setServerMsg(error.message))
-
     queryServer('/connect').then(obj => {
       setServerMsg(obj.text)
-    })
+    }).catch(error => setServerMsg(error.message))
 
-    let testItem = items.filter(item => item.id === 4)[0]
-    setServerMsg(testItem.text)
-    postData('/add-todo', testItem);
+    // let testItem = items.filter(item => item.id === 2)[0]
+    // setServerMsg(testItem.text)
+    // postData('/add-todo', testItem);
   }, [])
 
   async function queryServer(route) {
-    // let response = await fetch(URL + route);
-
-    // if (response.ok) { // if HTTP-status is 200-299
-    //   // get the response body (the method explained below)
-    //   let text = await response.text();
-    //   return text
-    // } else {
-    //   return ("HTTP-Error: " + response.status);
-    // }
-
-    // const response = await fetch(URL + route).then(response => {
-    //     if(response.status === 200) {
-    //       return response.parse()
-    //     }
-    //     else {
-    //       throw new Error('Something is wrong!')
-    //     }
-    //   }).then(parsedJSON => {
-    //     setServerMsg(parsedJSON.text)
-    //   }).catch(error => setServerMsg(error.message))
-      
       const response = await fetch(URL + route, {
         headers: {
           'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
-  
-      // let obj = await response.json()
-      // await obj.text ? setServerMsg(obj.text) : setServerMsg('oops!')
-
       return response.json();
   }
 
   async function postData(route = '', data = {}) {
-    // Default options are marked with *
     const response = await fetch(URL + route, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify(data)
     });
@@ -101,11 +62,17 @@ const App = () => {
   }
 
   const addItem = (text) => {
-    setItems(prevState => {
-      let newState = prevState.map(item => item)
-      newState.unshift({id: prevState.length+1, text: text})
-      return newState
+    postData('/add-todo', {text: text})
+    .then(response => {
+      setServerMsg(response.text)
+    }).then(() => {
+      setItems(prevState => {
+        let newState = prevState.map(item => item)
+        newState.unshift({id: prevState.length+1, text: text})
+        return newState
+      })
     })
+    .catch(error => setServerMsg(error.message));
   }
 
   const editItem = (id, text) => {
@@ -126,6 +93,19 @@ const App = () => {
     setIsEditInProgress(true)
   }
 
+  const changeCompleted = (item) => {
+
+    setItems(prevState => {
+      let newState = prevState.map(prevItem => {
+        if(prevItem.id === item.id){
+          prevItem.completed = !prevItem.completed
+        }
+        return prevItem
+      })
+      return newState;
+    })
+  }
+
   return(
     <View style={styles.view}>
       <Header />
@@ -144,6 +124,7 @@ const App = () => {
             item={item} 
             deleteItem={deleteItem}
             openEditor={openEditor}
+            changeCompleted={changeCompleted}
             isEditInProgress={isEditInProgress}
           />
         }
