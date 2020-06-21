@@ -60,32 +60,50 @@ const App = () => {
     return response.json();
   }
 
-  function login(credentials){
-    postData('/login', credentials)
-    .then((response) => {
-      switch(response.code) {
-        case 1:
-          getAllTodosFromServer(credentials.email);
-          setIsLoggedIn(true);
-          setServerMsg(response.text);
-          setEmail(credentials.email);
-          showComponent('App');
-          break;
-        case 2:
-          setServerMsg(response.text)
-          break;
-        case 3:
-            setServerMsg(response.text)
-          break;
-        case 4:
-            setServerMsg(response.text)
-          break;
-        default:
-          setServerMsg('Something Strange happened...' + response.text)
-          break;
-      }
-    })
-    .catch(err => setServerMsg('catched:' + err));
+  function login(credentials) {
+    let {email, password} = credentials;
+
+    if(!email) {
+      Alert.alert(
+        'Error', 
+        "Email field can't be empty!", 
+        [{text: 'Ok'}]
+      )
+    }
+    else if(!password) {
+      Alert.alert(
+        'Error', 
+        "Password field can't be empty!", 
+        [{text: 'Ok'}]
+      )
+    }
+    else {
+      postData('/login', credentials)
+      .then((response) => {
+        switch(response.code) {
+          case 1:
+            getAllTodosFromServer(credentials.email);
+            setIsLoggedIn(true);
+            setServerMsg(response.text);
+            setEmail(credentials.email);
+            showComponent('App');
+            break;
+          case 2:
+            setServerMsg(response.text);
+            break;
+          case 3:
+              setServerMsg(response.text);
+            break;
+          case 4:
+              setServerMsg(response.text);
+            break;
+          default:
+            setServerMsg('Something Strange happened...' + response.text);
+            break;
+        }
+      })
+      .catch(err => setServerMsg('catched:' + err));
+    }
   }
 
   function getAllTodosFromServer(email){
@@ -243,6 +261,12 @@ const App = () => {
     }
   }
 
+  function logout() {
+    setIsLoggedIn(false);
+    showComponent('Login');
+    setServerMsg('You successfully logged out.')
+  }
+
   if(!isLoggedIn) {
     return(
       <View>
@@ -266,7 +290,9 @@ const App = () => {
 
   return(
     <View style={styles.view}>
-      <Header />
+      <Header 
+        logout={logout}
+      />
       <Text>{serverMsg}</Text>
       <AddItem addItem={addItem}/>
       <EditItem 

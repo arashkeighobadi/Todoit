@@ -1,24 +1,43 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View, Text, TouchableOpacity} from 'react-native'
 
-const HeaderComponent = ({text}) => {
+const HeaderComponent = ({text, handlePress}) => {
     return(
         <View style={styles.header}>
             <Text style={styles.text}>{text}</Text>
+            <TouchableOpacity
+                    onPress={handlePress}
+                    style={styles.button}
+            >
+                <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = {
   header: {
+    flexDirection: 'row',
     height: 60,
     backgroundColor: 'darkslateblue',
-    justifyContent: 'center'
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   text: {
     color: 'white',
     fontSize: 23,
     textAlign: 'center'
+  },
+
+  button: {
+    margin: 2,
+    padding: 5,
+    alignItems: 'center',
+    backgroundColor: 'darkslateblue'
+  },
+
+  buttonText: {
+      color: 'white'
   }
 }
 
