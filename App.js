@@ -65,6 +65,7 @@ const App = () => {
     .then((response) => {
       switch(response.code) {
         case 1:
+          getAllTodosFromServer(credentials.email);
           setIsLoggedIn(true);
           setServerMsg(response.text);
           setEmail(credentials.email);
@@ -85,6 +86,15 @@ const App = () => {
       }
     })
     .catch(err => setServerMsg('catched:' + err));
+  }
+
+  function getAllTodosFromServer(email){
+    postData('/fetch-todos', {email: email})
+    .then(response => {
+      setServerMsg(response.text);
+      setItems(response.data);
+    })
+    .catch(err => setServerMsg(err.message));
   }
 
   function register(credentials){
@@ -134,9 +144,15 @@ const App = () => {
   }
 
   const deleteItem = (id) => {
-    setItems(prevState => 
-      prevState.filter(item => item.id != id)
-    )
+    postData('/delete-todo', {email, id})
+    .then(response => {
+      setServerMsg(response.text);
+      // setItems(prevState => 
+      //   prevState.filter(item => item.id != id)
+      // );
+      getAllTodosFromServer(email);
+    })
+    .catch(err => setServerMsg(err.message));
   }
 
   const addItem = (text) => {
@@ -145,9 +161,10 @@ const App = () => {
       setServerMsg(response.text)
     }).then(() => {
       setItems(prevState => {
-        let newState = prevState.map(item => item)
-        newState.unshift({id: prevState.length+1, text: text})
-        return newState
+        // let newState = prevState.map(item => item)
+        // newState.unshift({id: prevState.length + 1, text: text})
+        // return newState
+        getAllTodosFromServer(email);
       })
     })
     .catch(error => setServerMsg(error.message));
