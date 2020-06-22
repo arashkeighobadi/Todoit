@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
 import {View, Text, TextInput, TouchableOpacity, SnapshotViewIOSComponent} from 'react-native'
 
-const Login = ({login, serverMsg, isLoggedIn, isLoginVisible, showComponent}) => {
-    const [email, setEmail] = useState('')
+const Login = ({login, serverMsg, isLoggedIn, isLoginVisible, showComponent, email, setEmail}) => {
     const [password, setPassword] = useState('')
     const [registerIsVisible, setRegisterIsVisible] = useState(false)
 

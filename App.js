@@ -145,6 +145,7 @@ const App = () => {
         switch (response.code) {
           case 1:
             setServerMsg(response.text);
+            setEmail('');
             showComponent('Login');
             break;
           case 2:
@@ -276,6 +277,8 @@ const App = () => {
           isLoggedIn={isLoggedIn}
           isLoginVisible={isLoginVisible}
           showComponent={showComponent}
+          email={email}
+          setEmail={setEmail}
       />
       <Register 
           register={register}
