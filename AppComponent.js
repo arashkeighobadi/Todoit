@@ -65,6 +65,7 @@ const AppComponent = ({
         isEditInProgress={isEditInProgress}
       />
       <FlatList 
+        keyExtractor={item => item.id.toString()}
         data={items}
         renderItem={
           ({item}) => 
@@ -77,7 +78,6 @@ const AppComponent = ({
           />
         }
       />
-      <Text style={styles.text}>Here's some text</Text>
     </View>
   )
 }

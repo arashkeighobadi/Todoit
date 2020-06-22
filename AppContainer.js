@@ -24,6 +24,7 @@ const App = () => {
   }, [])
 
   async function queryServer(route) {
+    setServerMsg("Contacting server...");
       const response = await fetch(URL + route, {
         headers: {
           'Content-Type': 'application/json'
@@ -33,6 +34,7 @@ const App = () => {
   }
 
   async function postData(route = '', data = {}) {
+    setServerMsg("Contacting server...");
     const response = await fetch(URL + route, {
       method: 'POST',
       headers: {
@@ -184,24 +186,12 @@ const App = () => {
   }
 
   const changeCompleted = (item) => {
-
     postData('/edit-todo', {id: item.id, completed: item.completed})
     .then(response => {
       getAllTodosFromServer(email);
       setServerMsg(response.text);
     })
     .catch(err => setServerMsg(err.message));
-
-
-    setItems(prevState => {
-      let newState = prevState.map(prevItem => {
-        if(prevItem.id === item.id){
-          prevItem.completed = !prevItem.completed;
-        }
-        return prevItem;
-      })
-      return newState;
-    })
   }
 
   function showComponent(name){
