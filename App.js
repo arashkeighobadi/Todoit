@@ -1,27 +1,19 @@
-import React, {useState, useEffect} from 'react'
-import {View, Text, FlatList, TextInput, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react';
+import {View, Text, FlatList, TextInput, Alert} from 'react-native';
 
-import Login from './components/login/LoginContainer'
-import Register from './components/register/RegisterContainer'
-import Header from './components/header/HeaderContainer'
-import ListItem from './components/list_item/ListItemContainer'
-import AddItem from './components/add_item/AddItemContainer'
-import EditItem from './components/edit_item/EditItemContainer'
+import Login from './components/login/LoginContainer';
+import Register from './components/register/RegisterContainer';
+import Header from './components/header/HeaderContainer';
+import ListItem from './components/list_item/ListItemContainer';
+import AddItem from './components/add_item/AddItemContainer';
+import EditItem from './components/edit_item/EditItemContainer';
 
 const App = () => {
-  const SERVER_IP = '192.168.100.52'
-  const SERVER_PORT = '3000'
+  const SERVER_IP = '192.168.100.52';
+  const SERVER_PORT = '3000';
   const URL = `http://${SERVER_IP}:${SERVER_PORT}`;
 
-  const [items, setItems] = useState([
-    {id: 1, text: 'todo1', completed: true},
-    {id: 2, text: 'todo2', completed: false}
-    // {id: 3, text: ''},
-    // {id: 4, text: 'todo4'},
-    // {id: 5, text: 'todo5_______________________very___long___item'},
-    // {id: 6, text: 'todo6'},
-    // {id: 7, text: 'todo7'},
-  ]);
+  const [items, setItems] = useState([]);
   const [editableItem, setEditableItem] = useState({});
   const [isEditInProgress, setIsEditInProgress] = useState(false);
   const [serverMsg, setServerMsg] = useState('testing server ...');
@@ -32,12 +24,8 @@ const App = () => {
 
   useEffect(() => {
     queryServer('/connect').then(obj => {
-      setServerMsg(obj.text)
-    }).catch(error => setServerMsg(error.message))
-    
-    // let testItem = items.filter(item => item.id === 2)[0]
-    // setServerMsg(testItem.text)
-    // postData('/add-todo', testItem);
+      setServerMsg(obj.text);
+    }).catch(error => setServerMsg(error.message));
   }, [])
 
   async function queryServer(route) {
@@ -116,7 +104,7 @@ const App = () => {
   }
 
   function register(credentials){
-    let {email, password1, password2, age} = credentials
+    let {email, password1, password2, age} = credentials;
     if(!email){
       Alert.alert(
         'Error', 
@@ -166,9 +154,6 @@ const App = () => {
     postData('/delete-todo', {email, id})
     .then(response => {
       setServerMsg(response.text);
-      // setItems(prevState => 
-      //   prevState.filter(item => item.id != id)
-      // );
       getAllTodosFromServer(email);
     })
     .catch(err => setServerMsg(err.message));
@@ -180,9 +165,6 @@ const App = () => {
       setServerMsg(response.text)
     }).then(() => {
       setItems(prevState => {
-        // let newState = prevState.map(item => item)
-        // newState.unshift({id: prevState.length + 1, text: text})
-        // return newState
         getAllTodosFromServer(email);
       })
     })
@@ -199,20 +181,11 @@ const App = () => {
       setIsEditInProgress(false)
     })
     .catch(err => setServerMsg(err.message));
-
-    // setItems(prevState => 
-    //   prevState.map(item => {
-    //     if(item.id === id){
-    //       item.text = text
-    //     }
-    //     return item
-    //   })
-    // )
   }
 
   const openEditor = (item) => {
-    setEditableItem(item)
-    setIsEditInProgress(true)
+    setEditableItem(item);
+    setIsEditInProgress(true);
   }
 
   const changeCompleted = (item) => {
@@ -228,9 +201,9 @@ const App = () => {
     setItems(prevState => {
       let newState = prevState.map(prevItem => {
         if(prevItem.id === item.id){
-          prevItem.completed = !prevItem.completed
+          prevItem.completed = !prevItem.completed;
         }
-        return prevItem
+        return prevItem;
       })
       return newState;
     })
@@ -265,7 +238,7 @@ const App = () => {
   function logout() {
     setIsLoggedIn(false);
     showComponent('Login');
-    setServerMsg('You successfully logged out.')
+    setServerMsg('You successfully logged out.');
   }
 
   if(!isLoggedIn) {
@@ -331,4 +304,4 @@ const styles = {
   },
 }
 
-export default App
+export default App;

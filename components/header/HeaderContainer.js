@@ -1,11 +1,8 @@
-import React, {useState} from 'react'
-import {View, Text} from 'react-native'
-import HeaderComponent from './HeaderComponent'
+import React, {useState} from 'react';
+import HeaderComponent from './HeaderComponent';
 
 const Header = ({logout}) => {
-    const [text, setText] = useState(
-        'Todoit'
-    )
+    const [text, setText] = useState('Todoit');
 
     function handlePress() {
         logout();
@@ -16,7 +13,7 @@ const Header = ({logout}) => {
             text={text}
             handlePress={handlePress}
         />
-    )
+    );
 }
 
-export default Header
+export default Header;

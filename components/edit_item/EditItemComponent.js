@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {View, Text, TouchableOpacity, StyleSheet, Button, TextInput, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 
 
 const EditItemComponent = ({isEditInProgress, text, btnMsg, handleChange, handlePress}) => {

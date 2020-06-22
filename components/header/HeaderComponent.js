@@ -1,5 +1,5 @@
-import React from 'react'
-import {View, Text, TouchableOpacity} from 'react-native'
+import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const HeaderComponent = ({text, handlePress}) => {
     return(
@@ -12,10 +12,10 @@ const HeaderComponent = ({text, handlePress}) => {
                 <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
         </View>
-    )
+    );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     height: 60,
@@ -39,6 +39,6 @@ const styles = {
   buttonText: {
       color: 'white'
   }
-}
+});
 
-export default HeaderComponent
+export default HeaderComponent;

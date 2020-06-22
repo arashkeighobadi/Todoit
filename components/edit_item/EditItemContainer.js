@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-// import {View, Text, TouchableOpacity, StyleSheet, Button, TextInput, Alert} from 'react-native';
 import EditItemComponent from './EditItemComponent';
 
 const EditItem = ({editItem, isEditInProgress, editableItem}) => {
@@ -19,12 +18,12 @@ const EditItem = ({editItem, isEditInProgress, editableItem}) => {
             );
         }
         else {
-            editItem(editableItem.id, text)
+            editItem(editableItem.id, text);
         }
     }
 
     //If any item in the array (2nd param) changes, it runs the function (1st param)
-    useEffect(() => setText(editableItem.text), [editableItem.text])
+    useEffect(() => setText(editableItem.text), [editableItem.text]);
 
     return( 
         <EditItemComponent
