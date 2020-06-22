@@ -11,7 +11,7 @@ const ListItemComponent = ({item, deleteItem, openEditor, handlePress}) => {
         fontSize: 23,
         marginRight: 10,
         alignItems: 'center',
-        textDecorationLine: item.completed ? 'line-through' : ''
+        textDecorationLine: item.completed ? 'line-through' : 'none'
     }
 
     return(
