@@ -1,8 +1,7 @@
-import React, {useState} from 'react'
-import {View, Text, TouchableOpacity, StyleSheet, Button} from 'react-native'
-import Icon from 'react-native-vector-icons/dist/FontAwesome'
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, Button} from 'react-native';
 
-const ListItemBtns = ({item, deleteItem, openEditor}) => {
+const ListItemBtnsComponent = ({item, deleteItem, openEditor}) => {
     return(
         <View>
             <TouchableOpacity
@@ -18,7 +17,7 @@ const ListItemBtns = ({item, deleteItem, openEditor}) => {
                 <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity> 
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -54,4 +53,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ListItemBtns
+export default ListItemBtnsComponent;
