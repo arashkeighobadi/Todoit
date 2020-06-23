@@ -8,45 +8,26 @@ import ListItem from './components/list_item/ListItemContainer';
 import AddItem from './components/add_item/AddItemContainer';
 import EditItem from './components/edit_item/EditItemContainer';
 
-const AppComponent = ({
-    logout, 
-    showComponent, 
-    changeCompleted, 
-    openEditor, 
-    editItem, 
-    deleteItem,
-    addItem,
-    register, 
-    login,
-    items,
-    editableItem,
-    isEditInProgress,
-    serverMsg,
-    isLoggedIn,
-    isLoginVisible,
-    isRegisterVisible,
-    email,
-    setEmail,
-}) => {
+const AppComponent = (props) => {
 
-  if(!isLoggedIn) {
+  if(!props.isLoggedIn) {
     return(
       <View>
         <Login 
-          login={login}
-          serverMsg={serverMsg}
-          isLoggedIn={isLoggedIn}
-          isLoginVisible={isLoginVisible}
-          showComponent={showComponent}
-          email={email}
-          setEmail={setEmail}
+          login={props.login}
+          serverMsg={props.serverMsg}
+          isLoggedIn={props.isLoggedIn}
+          isLoginVisible={props.isLoginVisible}
+          showComponent={props.showComponent}
+          email={props.email}
+          setEmail={props.setEmail}
       />
       <Register 
-          register={register}
-          serverMsg={serverMsg}
-          isLoggedIn={isLoggedIn}
-          isRegisterVisible={isRegisterVisible}
-          showComponent={showComponent}
+          register={props.register}
+          serverMsg={props.serverMsg}
+          isLoggedIn={props.isLoggedIn}
+          isRegisterVisible={props.isRegisterVisible}
+          showComponent={props.showComponent}
       />
       </View>
     )
@@ -55,26 +36,26 @@ const AppComponent = ({
   return(
     <View style={styles.view}>
       <Header 
-        logout={logout}
+        logout={props.logout}
       />
-      <Text>{serverMsg}</Text>
-      <AddItem addItem={addItem}/>
+      <Text>{props.serverMsg}</Text>
+      <AddItem addItem={props.addItem}/>
       <EditItem 
-        editableItem={editableItem}
-        editItem={editItem}
-        isEditInProgress={isEditInProgress}
+        editableItem={props.editableItem}
+        editItem={props.openEditor}
+        isEditInProgress={props.isEditInProgress}
       />
       <FlatList 
         keyExtractor={item => item.id.toString()}
-        data={items}
+        data={props.items}
         renderItem={
           ({item}) => 
           <ListItem 
             item={item}
-            deleteItem={deleteItem}
-            openEditor={openEditor}
-            changeCompleted={changeCompleted}
-            isEditInProgress={isEditInProgress}
+            deleteItem={props.deleteItem}
+            openEditor={props.openEditor}
+            changeCompleted={props.changeCompleted}
+            isEditInProgress={props.isEditInProgress}
           />
         }
       />
